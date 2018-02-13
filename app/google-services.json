@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "564407001190",
+    "firebase_url": "https://okoshome-541e7.firebaseio.com",
+    "project_id": "okoshome-541e7",
+    "storage_bucket": "okoshome-541e7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:564407001190:android:1b464d1285c6f663",
+        "android_client_info": {
+          "package_name": "uk.ac.napier.okoshome"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "564407001190-hrd272vp812pmk7p30or42sm8qk5ju3n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC39dh7j5hE19j1aCV9Kwqu19zwTC906e0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
