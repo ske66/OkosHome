@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "564407001190-fc3mlr4fqum44gt6ptfrv5sdarchlpo6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "uk.ac.napier.okoshome",
+            "certificate_hash": "9263b114fd9ecee44b4e2d6343f7c327a344ef6c"
+          }
+        },
+        {
           "client_id": "564407001190-hrd272vp812pmk7p30or42sm8qk5ju3n.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -29,8 +37,13 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "564407001190-hrd272vp812pmk7p30or42sm8qk5ju3n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2
