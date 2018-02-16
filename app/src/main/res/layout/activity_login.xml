@@ -15,30 +15,32 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="293dp"
         android:layout_weight="1"
-        android:src="@drawable/OkosHomeLogo" />
+        android:src="@drawable/okos_home_logo" />
 
     <EditText
         android:id="@+id/txtEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
+        android:layout_alignEnd="@+id/txtPassword"
+        android:layout_alignStart="@+id/txtPassword"
         android:layout_centerVertical="true"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Name"
-        android:textColor="#fff"/>
+        android:hint="Name"
+        android:textColor="@color/colorAccent" />
 
     <EditText
         android:id="@+id/txtPassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/txtEmail"
+        android:layout_alignEnd="@+id/button2"
+        android:layout_alignStart="@+id/button2"
         android:layout_below="@+id/txtEmail"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="19dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Password"
-        android:textColor="#fff"/>
+        android:hint="Password"
+        android:textColor="@color/colorAccent" />
 
     <Button
         android:id="@+id/button2"
@@ -50,6 +52,6 @@
         android:background="@color/colorAccent"
         android:paddingLeft="100dp"
         android:paddingRight="100dp"
-        android:text="Button"
+        android:text="Log In"
         android:textColor="#fff" />
 </RelativeLayout>
