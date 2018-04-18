@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="uk.ac.napier.okoshome.LightingActivity">
+    tools:context="uk.ac.napier.okoshome.AirActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"
@@ -33,5 +33,5 @@
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_lighting" />
+    <include layout="@layout/content_air" />
 </android.support.design.widget.CoordinatorLayout>

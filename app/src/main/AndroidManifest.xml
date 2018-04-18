@@ -31,6 +31,10 @@
         <activity
             android:name=".LightingActivity"
             android:label="@string/title_activity_lighting"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".AirActivity"
+            android:label="@string/title_activity_air"
             android:theme="@style/AppTheme"></activity>
     </application>
 
