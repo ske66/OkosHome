@@ -1,9 +1,7 @@
 package uk.ac.napier.okoshome;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.TimePickerDialog;
-import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -13,9 +11,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.NumberPicker;
-import android.widget.Spinner;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -25,17 +22,12 @@ import org.eclipse.paho.client.mqttv3.IMqttActionListener;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.IMqttToken;
 import org.eclipse.paho.client.mqttv3.MqttCallbackExtended;
-import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
-import java.io.UnsupportedEncodingException;
-import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
-
 
 public class HeatingActivity extends AppCompatActivity {
 
@@ -45,14 +37,15 @@ public class HeatingActivity extends AppCompatActivity {
 
 
     String clientId = "ExampleAndroidClient";
-    final String publishTopic = "exampleAndroidPublishTopic";
     final String username = "mark";
     final String password = "sensing";
-
-
-    SimpleDateFormat sdf = new SimpleDateFormat("HHmm");
-    String currentTime = sdf.format(new Date());
-
+    int Temp = 20;
+    String startTemperature = "30";
+    String endTemperature = "45";
+    String startingTime = "12:00";
+    String endingTime = "13:00";
+    boolean tempMode = false;
+    boolean timeMode = false;
 
 
 
@@ -82,12 +75,7 @@ public class HeatingActivity extends AppCompatActivity {
 
         modeCard.setCardBackgroundColor(Color.rgb(240, 240, 240));
         timeCard.setCardBackgroundColor(Color.rgb(240, 240, 240));
-        tempCard.setCardBackgroundColor(Color.rgb(240,240,240));
-
-        boolean Heating;
-        boolean AutoHeating;
-        boolean TimedHeating;
-        boolean TempHeating;
+        tempCard.setCardBackgroundColor(Color.rgb(240, 240, 240));
 
 
         startTime.setEnabled(false);
@@ -103,9 +91,13 @@ public class HeatingActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                publishMessage("Heating: ON");
-
                 if (heatingOn.isChecked()) {
+
+                    publishMessage("N", "livingroom/heating");
+
+                    timeMode = false;
+                    tempMode = false;
+
                     autoHeatingOn.setChecked(false);
                     timeModeOn.setChecked(false);
                     tempModeOn.setChecked(false);
@@ -121,10 +113,12 @@ public class HeatingActivity extends AppCompatActivity {
                     tempCard.setCardBackgroundColor(Color.rgb(240, 240, 240));
 
                 } else {
-                    publishMessage("Heating: OFF");
+
+                    publishMessage("F", "livingroom/heating");
+
                     modeCard.setCardBackgroundColor(Color.rgb(240, 240, 240));
-                    timeCard.setCardBackgroundColor(Color.rgb(240,240,240));
-                    tempCard.setCardBackgroundColor(Color.rgb(240,240,240));
+                    timeCard.setCardBackgroundColor(Color.rgb(240, 240, 240));
+                    tempCard.setCardBackgroundColor(Color.rgb(240, 240, 240));
                     startTime.setEnabled(false);
                     endTime.setEnabled(false);
                     startTemp.setEnabled(false);
@@ -139,7 +133,13 @@ public class HeatingActivity extends AppCompatActivity {
             public void onClick(View view) {
 
 
+
                 if (autoHeatingOn.isChecked()) {
+
+                    publishMessage("F", "livingroom/heating");
+
+                    timeMode = true;
+
                     heatingOn.setChecked(false);
                     timeModeOn.setChecked(true);
                     timeModeOn.setEnabled(true);
@@ -151,9 +151,14 @@ public class HeatingActivity extends AppCompatActivity {
                     confirmTemp.setEnabled(false);
                     modeCard.setCardBackgroundColor(Color.rgb(255, 255, 255));
                     timeCard.setCardBackgroundColor(Color.rgb(255, 255, 255));
-                    tempCard.setCardBackgroundColor(Color.rgb(240,240,240));
+                    tempCard.setCardBackgroundColor(Color.rgb(240, 240, 240));
 
                 } else {
+
+                    publishMessage("F", "livingroom/heating");
+
+                    timeMode = false;
+                    tempMode = false;
 
                     timeModeOn.setChecked(false);
                     tempModeOn.setChecked(false);
@@ -167,7 +172,8 @@ public class HeatingActivity extends AppCompatActivity {
                     confirmTemp.setEnabled(false);
                     modeCard.setCardBackgroundColor(Color.rgb(240, 240, 240));
                     timeCard.setCardBackgroundColor(Color.rgb(240, 240, 240));
-                    tempCard.setCardBackgroundColor(Color.rgb(240,240,240));
+                    tempCard.setCardBackgroundColor(Color.rgb(240, 240, 240));
+
                 }
             }
         });
@@ -176,7 +182,13 @@ public class HeatingActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+
+
                 if (timeModeOn.isChecked()) {
+                    publishMessage("F", "livingroom/heating");
+
+                    timeMode = true;
+                    tempMode = false;
                     tempModeOn.setChecked(false);
                     startTime.setEnabled(true);
                     endTime.setEnabled(true);
@@ -186,8 +198,12 @@ public class HeatingActivity extends AppCompatActivity {
                     tempModeOn.setEnabled(true);
                     confirmTemp.setEnabled(false);
                     timeCard.setCardBackgroundColor(Color.rgb(255, 255, 255));
-                    tempCard.setCardBackgroundColor(Color.rgb(240,240,240));
+                    tempCard.setCardBackgroundColor(Color.rgb(240, 240, 240));
                 } else {
+                    publishMessage("F", "livingroom/heating");
+
+                    timeMode = false;
+                    tempMode = true;
                     tempModeOn.setChecked(true);
                     startTime.setEnabled(false);
                     endTime.setEnabled(false);
@@ -197,7 +213,7 @@ public class HeatingActivity extends AppCompatActivity {
                     tempModeOn.setEnabled(true);
                     confirmTemp.setEnabled(true);
                     timeCard.setCardBackgroundColor(Color.rgb(240, 240, 240));
-                    tempCard.setCardBackgroundColor(Color.rgb(255,255,255));
+                    tempCard.setCardBackgroundColor(Color.rgb(255, 255, 255));
                 }
             }
         });
@@ -206,32 +222,39 @@ public class HeatingActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                if (tempModeOn.isChecked())
-                {
+
+
+                if (tempModeOn.isChecked()) {
+
+                    publishMessage("F", "livingroom/heating");
+
+                    tempMode = true;
                     timeModeOn.setChecked(false);
                     startTime.setEnabled(false);
                     endTime.setEnabled(false);
                     startTemp.setEnabled(true);
                     endTemp.setEnabled(true);
                     confirmTemp.setEnabled(true);
-                    timeCard.setCardBackgroundColor(Color.rgb(240,240,240));
-                    tempCard.setCardBackgroundColor(Color.rgb(255,255,255));
-                }
-                else
-                {
+                    timeCard.setCardBackgroundColor(Color.rgb(240, 240, 240));
+                    tempCard.setCardBackgroundColor(Color.rgb(255, 255, 255));
+                } else {
+
+                    publishMessage("F", "livingroom/heating");
+
+                    timeMode = true;
+                    tempMode = false;
                     timeModeOn.setChecked(true);
                     startTime.setEnabled(true);
                     endTime.setEnabled(true);
                     startTemp.setEnabled(false);
                     endTemp.setEnabled(false);
                     confirmTemp.setEnabled(false);
-                    timeCard.setCardBackgroundColor(Color.rgb(255,255,255));
-                    tempCard.setCardBackgroundColor(Color.rgb(240,240,240));
+                    timeCard.setCardBackgroundColor(Color.rgb(255, 255, 255));
+                    tempCard.setCardBackgroundColor(Color.rgb(240, 240, 240));
                 }
 
             }
         });
-
 
         startTime.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -239,46 +262,32 @@ public class HeatingActivity extends AppCompatActivity {
                 AlertDialog.Builder builder = new AlertDialog.Builder(HeatingActivity.this);
                 builder.setTitle("Time Picker");
                 builder.setIcon(R.mipmap.ic_launcher);
-                Calendar calendar = Calendar.getInstance();
+                final Calendar calendar = Calendar.getInstance();
                 TimePickerDialog timePickerDialog = new TimePickerDialog(HeatingActivity.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
 
                         String startTimeHour;
                         String startTimeMinute;
-                        String timeOfDay;
 
-                        if (hourOfDay < 10)
-                        {
+                      if (hourOfDay < 10) {
                             startTimeHour = "0" + Integer.toString(hourOfDay);
                             startTimeMinute = Integer.toString(minute);
-                        }
-                        else
-                        {
+                        } else {
                             startTimeHour = Integer.toString(hourOfDay);
                             startTimeMinute = Integer.toString(minute);
                         }
 
-                        if (hourOfDay > 11)
-                        {
-                            timeOfDay = "PM";
-                        }
-                        else
-                        {
-                            timeOfDay = "AM";
-                        }
-
-                        String StartTime = startTimeHour + ":" + startTimeMinute + " " + timeOfDay;
-
-                        Toast.makeText(HeatingActivity.this, StartTime, Toast.LENGTH_SHORT).show();
+                        String StartTime = startTimeHour + ":" + startTimeMinute;
 
                         startTime.setText(StartTime);
 
-
+                        startingTime = StartTime;
 
                     }
-                }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true);
+                }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), false);
                 timePickerDialog.show();
+
             }
 
             //if the time chosen is == currentTime, then turn on heating
@@ -288,6 +297,7 @@ public class HeatingActivity extends AppCompatActivity {
         endTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 AlertDialog.Builder builder = new AlertDialog.Builder(HeatingActivity.this);
                 builder.setTitle("Time Picker");
                 builder.setIcon(R.mipmap.ic_launcher);
@@ -300,111 +310,163 @@ public class HeatingActivity extends AppCompatActivity {
                         String endTimeMinute;
                         String timeOfDay;
 
-                        if (hourOfDay < 10)
-                        {
-                             endTimeHour = "0" + Integer.toString(hourOfDay);
-                             endTimeMinute = Integer.toString(minute);
-                        }
-                        else
-                        {
+                        if (hourOfDay < 10) {
+                            endTimeHour = "0" + Integer.toString(hourOfDay);
+                            endTimeMinute = Integer.toString(minute);
+                        } else {
                             endTimeHour = Integer.toString(hourOfDay);
                             endTimeMinute = Integer.toString(minute);
                         }
 
-                        if (hourOfDay > 11)
-                        {
-                            timeOfDay = "PM";
-                        }
-                        else
-                        {
-                            timeOfDay = "AM";
-                        }
-
-                        String EndTime = endTimeHour + ":" + endTimeMinute + " " + timeOfDay;
-
-                        Toast.makeText(HeatingActivity.this,EndTime, Toast.LENGTH_SHORT).show();
+                        String EndTime = endTimeHour + ":" + endTimeMinute;
 
                         endTime.setText(EndTime);
+
+                        endingTime = EndTime;
+
+
                     }
-                }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true);
+                }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), false);
                 timePickerDialog.show();
             }
-
-            //if the time chosen to finish is == currentTime then turn off heating
-
         });
+
 
         confirmTemp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                String startTemperature =  startTemp.getText().toString();
-                String endTemperature = endTemp.getText().toString();
+                if (Integer.parseInt(startTemp.getText().toString()) > Integer.parseInt(endTemp.getText().toString()))
+                {
+                    Toast.makeText(HeatingActivity.this, "Starting temperature cannot be higher than end temperature!", Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    startTemperature = startTemp.getText().toString();
+                    endTemperature = endTemp.getText().toString();
+                }
             }
         });
+
+
+
+        //get current time
+        Thread t = new Thread() {
+            @Override
+            public void run() {
+                try {
+                    while (!isInterrupted()) {
+                        Thread.sleep(5000);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Calendar now = Calendar.getInstance();
+                                SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+                                String time = format.format(now.getTime());
+
+
+                                if (timeMode == true)
+                                {
+                                    if (time.equals(startingTime))
+                                    {
+                                        publishMessage("N", "livingroom/heating");
+                                    }
+                                    else if (time.equals(endingTime))
+                                    {
+                                        publishMessage("F", "livingroom/heating");
+                                    }
+                                }
+                            }
+                        });
+                    }
+                } catch (InterruptedException e) {
+
+                }
+            }
+        };
+        t.start();
+
+
+
+
+
 
 
 
         clientId = clientId + System.currentTimeMillis();
 
-        mqttAndroidClient = new MqttAndroidClient(getApplicationContext(), serverUri, clientId);
-        mqttAndroidClient.setCallback(new MqttCallbackExtended() {
-            @Override
-            public void connectComplete(boolean reconnect, String serverURI) {
-
-            }
-
-            @Override
-            public void connectionLost(Throwable cause) {
-
-            }
-
-            @Override
-            public void messageArrived(String topic, MqttMessage message) throws Exception {
-                Log.w("Debug", new String(message.getPayload()));
-                subscribeToTopic("livingroom/okoshome/#");
-
-            }
-
-            @Override
-            public void deliveryComplete(IMqttDeliveryToken token) {
-
-            }
-        });
-
-        MqttConnectOptions mqttConnectOptions = new MqttConnectOptions();
-        mqttConnectOptions.setUserName(username);
-        mqttConnectOptions.setPassword(password.toCharArray());
-        mqttConnectOptions.setAutomaticReconnect(true);
-        mqttConnectOptions.setCleanSession(false);
-
-
-        try {
-            mqttAndroidClient.connect(mqttConnectOptions, null, new IMqttActionListener() {
+            mqttAndroidClient = new MqttAndroidClient(getApplicationContext(), serverUri, clientId);
+            mqttAndroidClient.setCallback(new MqttCallbackExtended() {
                 @Override
-                public void onSuccess(IMqttToken asyncActionToken) {
-                    DisconnectedBufferOptions disconnectedBufferOptions = new DisconnectedBufferOptions();
-                    disconnectedBufferOptions.setBufferEnabled(true);
-                    disconnectedBufferOptions.setBufferSize(100);
-                    disconnectedBufferOptions.setPersistBuffer(false);
-                    disconnectedBufferOptions.setDeleteOldestMessages(false);
-                    mqttAndroidClient.setBufferOpts(disconnectedBufferOptions);
-                    subscribeToTopic("livingroom/okoshome/#");
+                public void connectComplete(boolean reconnect, String serverURI) {
 
                 }
 
                 @Override
-                public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
+                public void connectionLost(Throwable cause) {
+
+                }
+
+                @Override
+                public void messageArrived(String topic, MqttMessage message) throws Exception {
+                    Log.w("Debug", new String(message.getPayload()));
+                    subscribeToTopic("okoshome");
+
+                    if (message.toString().contains("TEMP:")) {
+                        String InstructionValue = message.toString().replace("TEMP:   ", "");
+                        Integer.parseInt(InstructionValue);
+
+                        Temp = Integer.parseInt(InstructionValue);
+
+                        if (tempMode == true) {
+                            if (Temp >= Integer.parseInt(startTemperature) && Temp < Integer.parseInt(endTemperature)) {
+                                publishMessage("N", "livingroom/heating");
+                            } else {
+                                publishMessage("F", "livingroom/heating");
+                            }
+                        }
+                    }
+                }
+
+                @Override
+                public void deliveryComplete(IMqttDeliveryToken token) {
 
                 }
             });
-        } catch (MqttException ex) {
-            ex.printStackTrace();
-        }
+
+            MqttConnectOptions mqttConnectOptions = new MqttConnectOptions();
+            mqttConnectOptions.setUserName(username);
+            mqttConnectOptions.setPassword(password.toCharArray());
+            mqttConnectOptions.setAutomaticReconnect(true);
+            mqttConnectOptions.setCleanSession(false);
+
+
+            try {
+                mqttAndroidClient.connect(mqttConnectOptions, null, new IMqttActionListener() {
+                    @Override
+                    public void onSuccess(IMqttToken asyncActionToken) {
+                        DisconnectedBufferOptions disconnectedBufferOptions = new DisconnectedBufferOptions();
+                        disconnectedBufferOptions.setBufferEnabled(true);
+                        disconnectedBufferOptions.setBufferSize(100);
+                        disconnectedBufferOptions.setPersistBuffer(false);
+                        disconnectedBufferOptions.setDeleteOldestMessages(false);
+                        mqttAndroidClient.setBufferOpts(disconnectedBufferOptions);
+                        subscribeToTopic("okoshome");
+
+                    }
+
+                    @Override
+                    public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
+
+                    }
+                });
+            } catch (MqttException ex) {
+                ex.printStackTrace();
+            }
+
 
 
     }
-
 
     public void subscribeToTopic(String sTopic) {
         try {
@@ -426,12 +488,12 @@ public class HeatingActivity extends AppCompatActivity {
         }
     }
 
-    public void publishMessage(String a){
+    public void publishMessage(String pMessage, String pTopic){
 
         try{
             MqttMessage message = new MqttMessage();
-            message.setPayload(a.getBytes());
-            mqttAndroidClient.publish(publishTopic, message);
+            message.setPayload(pMessage.getBytes());
+            mqttAndroidClient.publish(pTopic, message);
 
         }catch (MqttException e) {
             System.err.println("Error Publish: " + e.getMessage());

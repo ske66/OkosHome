@@ -38,21 +38,14 @@ import java.io.UnsupportedEncodingException;
 
         int currentTemperature;
         int currentLights = 2;
-        int carbonMonoxideLevel = 5;
         int humidificationLevel = 22;
-        int airPurificationLevel = 90;
 
-        String currentLock = "locked";
-
-        Button btnPublish;
+        String currentLock = "Locked";
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_main);
-
-            btnPublish = (Button) findViewById(R.id.btnPublish);
-
 
             //TextViews
             final TextView txtTemperature = (TextView) findViewById(R.id.txtTemperature);
@@ -61,16 +54,16 @@ import java.io.UnsupportedEncodingException;
             final TextView txtAir = (TextView) findViewById(R.id.txtAir);
 
             //CardViews
-            CardView heatingCard = (CardView) findViewById(R.id.HeatingCard);
-            CardView lightingCard = (CardView) findViewById(R.id.LightingCard);
-            CardView lockCard = (CardView) findViewById(R.id.LockCard);
-            CardView airCard = (CardView) findViewById(R.id.AirCard);
+          final  CardView heatingCard = (CardView) findViewById(R.id.HeatingCard);
+            final CardView lightingCard = (CardView) findViewById(R.id.LightingCard);
+           final CardView lockCard = (CardView) findViewById(R.id.LockCard);
+            final CardView airCard = (CardView) findViewById(R.id.AirCard);
 
 
             txtTemperature.setText("Temp: " + currentTemperature + "c");
             txtLighting.setText("Lights on: " + currentLights);
             txtLock.setText(currentLock);
-            txtAir.setText("CO Level: " + carbonMonoxideLevel + "%");
+            txtAir.setText("Humidity: " + humidificationLevel + "%");
 
             heatingCard.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -96,14 +89,6 @@ import java.io.UnsupportedEncodingException;
                 }
             });
 
-            btnPublish.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    publishMessage("OFF", "TEST1");
-                }
-            });
-
-
 
             clientId = clientId + System.currentTimeMillis();
 
@@ -112,7 +97,7 @@ import java.io.UnsupportedEncodingException;
                 @Override
                 public void connectComplete(boolean reconnect, String serverURI) {
 
-                    subscribeToTopic("livingroom/okoshome/#");
+                    subscribeToTopic("okoshome");
 
                 }
 
@@ -130,24 +115,59 @@ import java.io.UnsupportedEncodingException;
                     {
                         String InstructionValue = message.toString().replace("TEMP:   ", "");
                         txtTemperature.setText("Temp: " + InstructionValue + "c");
+
+                        if (Integer.parseInt(InstructionValue) > 5 && Integer.parseInt(InstructionValue) <=30 ) {
+                            heatingCard.setCardBackgroundColor(Color.parseColor("#ffffff"));
+                        }
+                        if (Integer.parseInt(InstructionValue) > 30 && Integer.parseInt(InstructionValue) < 45) {
+                            heatingCard.setCardBackgroundColor(Color.parseColor("#ffd9b3"));
+                        }
+                        if (Integer.parseInt(InstructionValue) >= 45 && Integer.parseInt(InstructionValue) < 70) {
+                            heatingCard.setCardBackgroundColor(Color.parseColor("#ffb3b3"));
+                        }
+
+                        if (Integer.parseInt(InstructionValue) > 70)
+                        {
+                            Toast.makeText(MainActivity.this, "This place is too toasty, Fire services have been notified", Toast.LENGTH_SHORT).show();
+                        }
+
                     }
                   else if (message.toString().contains("LIGHT:"))
                     {
                         String InstructionValue = message.toString().replace("LIGHT:   ", "");
                         txtLighting.setText("Lights On: " + InstructionValue);
+
+                        if (Integer.parseInt(InstructionValue) >= 0 && Integer.parseInt(InstructionValue) <= 6) {
+                            lightingCard.setCardBackgroundColor(Color.parseColor("#ffffff"));
+                        }
+                        if (Integer.parseInt(InstructionValue) > 6 && Integer.parseInt(InstructionValue) < 10) {
+                            lightingCard.setCardBackgroundColor(Color.parseColor("#ffd9b3"));
+                        }
+                        if (Integer.parseInt(InstructionValue) >= 10) {
+                            lightingCard.setCardBackgroundColor(Color.parseColor("#ffb3b3"));
+                        }
                     }
 
 
-                   else if (message.toString().contains("CO:"))
+                   else if (message.toString().contains("RH:"))
                     {
-                        String InstructionValue = message.toString().replace("CO:   ", "");
-                        txtAir.setText("CO Level: " + InstructionValue  + "%");
+                        String InstructionValue = message.toString().replace("RH:   ", "");
+                        txtAir.setText("Humidity: " + InstructionValue  + "%");
                     }
 
                     else if (message.toString().contains("DOOR:"))
                     {
                         String InstructionValue = message.toString().replace("DOOR:   ", "");
-                        txtLock.setText("Door: " + InstructionValue  + "%");
+                        txtLock.setText("Door: " + InstructionValue);
+
+                        //Lock warning validation
+                        if (InstructionValue.equals("Unlocked")) {
+                            lockCard.setCardBackgroundColor(Color.parseColor("#ffb3b3"));
+                        }
+                        else if (InstructionValue.equals("Locked")){
+                            lockCard.setCardBackgroundColor(Color.parseColor("#ffffff"));
+                        }
+
                     }
 
                 }
@@ -175,7 +195,7 @@ import java.io.UnsupportedEncodingException;
                         disconnectedBufferOptions.setPersistBuffer(false);
                         disconnectedBufferOptions.setDeleteOldestMessages(false);
                         mqttAndroidClient.setBufferOpts(disconnectedBufferOptions);
-                        subscribeToTopic("livingroom/okoshome/#");
+                        subscribeToTopic("okoshome");
 
                     }
 
@@ -186,97 +206,6 @@ import java.io.UnsupportedEncodingException;
                 });
             } catch (MqttException ex) {
                 ex.printStackTrace();
-            }
-
-
-
-
-
-            ///////VALIDATONS///////
-
-
-            //Temperature warning validation
-            if (currentTemperature > 30 && currentTemperature < 45) {
-                heatingCard.setCardBackgroundColor(Color.parseColor("#ffd9b3"));
-            } else if (currentTemperature >= 45) {
-                heatingCard.setCardBackgroundColor(Color.parseColor("#ffb3b3"));
-            }
-
-            //Lighting warning validation
-            if (currentLights > 6 && currentLights < 10) {
-                lightingCard.setCardBackgroundColor(Color.parseColor("#ffd9b3"));
-            } else if (currentLights >= 10) {
-                lightingCard.setCardBackgroundColor(Color.parseColor("#ffb3b3"));
-            }
-
-            //Lock warning validation
-            if (currentLock == "Unlocked") {
-                lockCard.setCardBackgroundColor(Color.parseColor("#ffb3b3"));
-            }
-
-
-            //Carbon Monoxide Validation
-            if (carbonMonoxideLevel > 10 && humidificationLevel < 70 && airPurificationLevel < 80) {
-                airCard.setCardBackgroundColor(Color.parseColor("#ffb3b3"));
-                txtAir.setText("CO Level: " + carbonMonoxideLevel + "%");
-
-                //turn off heating
-
-                //Alexa warn user that Humidity levels are high
-            }
-
-            if (carbonMonoxideLevel > 10 && humidificationLevel > 70 && airPurificationLevel < 80) {
-                airCard.setCardBackgroundColor(Color.parseColor("#ffb3b3"));
-                txtAir.setText("CO Level: " + carbonMonoxideLevel + "%");
-
-                //turn off heating
-
-                //Alexa warn user that Humidity levels are high
-            }
-
-            if (carbonMonoxideLevel > 10 && humidificationLevel > 70 && airPurificationLevel >= 80) {
-                airCard.setCardBackgroundColor(Color.parseColor("#ffb3b3"));
-                txtAir.setText("CO Level: " + carbonMonoxideLevel + "%");
-
-                //turn off heating
-
-                //Alexa warn user that Humidity levels are high
-            }
-
-            if (carbonMonoxideLevel > 10 && humidificationLevel < 70 && airPurificationLevel >= 80) {
-                airCard.setCardBackgroundColor(Color.parseColor("#ffb3b3"));
-                txtAir.setText("CO Level: " + carbonMonoxideLevel + "%");
-
-                //turn off heating
-
-                //Alexa warn user that Humidity levels are high
-            }
-
-
-            //Humidity Validation
-            if (carbonMonoxideLevel <= 10 && humidificationLevel >= 70 && airPurificationLevel >= 80) {
-                airCard.setCardBackgroundColor(Color.parseColor("#ffb3b3"));
-                txtAir.setText("Humidity: " + humidificationLevel + "%");
-
-                //turn off heating
-
-                //Alexa warn user that Humidity levels are high
-            }
-
-            if (carbonMonoxideLevel <= 10 && humidificationLevel >= 70 && airPurificationLevel < 80) {
-                airCard.setCardBackgroundColor(Color.parseColor("#ffb3b3"));
-                txtAir.setText("Humidity: " + humidificationLevel + "%");
-
-                //turn off heating
-            }
-
-
-            //Air Purification Validation
-            if (carbonMonoxideLevel <= 10 && humidificationLevel < 70 && airPurificationLevel < 80) {
-                airCard.setCardBackgroundColor(Color.parseColor("#ffb3b3"));
-                txtAir.setText("Air Purity: " + airPurificationLevel + "%");
-
-                //turn off heating
             }
         }
 

@@ -29,7 +29,7 @@
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
             android:textSize="7pt"
-            android:text="Stats"
+            android:text="Power"
             />
 
         <LinearLayout
@@ -39,27 +39,41 @@
             android:gravity="center"
             android:layout_marginTop="45dp">
 
+            <Switch
+                android:id="@+id/switch1"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:textSize="7.5pt"
+                android:text="Air Filtration" />
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="20dp"
-                android:id="@+id/txtHumidity"
-                android:text="humidity"/>
+                android:text="Turn on air purification"/>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginTop="110dp">
+
+            <Switch
+                android:id="@+id/switch2"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:textSize="7.5pt"
+                android:text="Automatic Filtration" />
 
             <TextView
-                android:id="@+id/txtDust"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="20dp"
-                android:text="Dust"/>
-
-            <TextView
-                android:id="@+id/txtCO"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="20dp"
-                android:text="CO"/>
-
+                android:text="Enable automatic air filtration"/>
 
         </LinearLayout>
 
@@ -69,22 +83,311 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:layout_marginTop="110dp">
-            <Switch
-                android:id="@+id/switch2"
-                android:layout_width="300dp"
-                android:layout_height="wrap_content"
-                android:textSize="7.5pt"
-                android:text="Automatic Lighting" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="20dp"
-                android:text="Enable automatic lighting"/>
 
         </LinearLayout>
 
     </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:layout_columnWeight="1"
+            android:layout_margin="8dp"
+            android:layout_rowWeight="1"
+            android:id="@+id/Mode"
+            app:cardCornerRadius="8dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:textSize="7pt"
+                android:text="Modes"
+                />
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginTop="45dp"
+                android:layout_marginLeft="10dp"
+                >
+                <Switch
+                    android:id="@+id/switch3"
+                    android:layout_width="300dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_height="wrap_content"
+                    android:textSize="7.5pt"
+                    android:text="Dust Mode" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="20dp"
+                    android:text="Dust filter will be turned on"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="20dp"
+                    android:text="and off at certain times of day"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginTop="110dp"
+                android:layout_marginLeft="10dp"
+                >
+                <Switch
+                    android:id="@+id/switch4"
+                    android:layout_width="300dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_height="wrap_content"
+                    android:textSize="7.5pt"
+                    android:text="Humidity Mode" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="20dp"
+                    android:text="Air filter will be turned on when "/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="20dp"
+                    android:text="humidity leves reach a certain level"/>
+
+
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+
+
+
+        <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:layout_columnWeight="1"
+        android:layout_margin="8dp"
+        android:layout_rowWeight="1"
+        android:id="@+id/Dust"
+        app:cardCornerRadius="8dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:textSize="7pt"
+            android:text="Dust"
+            />
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:paddingTop="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="45dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Start Dust Level:"
+                    android:paddingRight="80dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="30dp"
+
+                    android:textColor="#000"
+                    android:textSize="7.5pt"/>
+
+                <EditText
+                    android:id="@+id/txtStartDust"
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:inputType="number" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:paddingTop="70dp"
+            android:layout_width="wrap_content"
+            android:layout_height="200dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="45dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="End Dust Level:"
+                    android:paddingRight="90dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="30dp"
+                    android:textColor="#000"
+                    android:textSize="7.5pt"/>
+
+                <EditText
+                    android:id="@+id/txtEndDust"
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:inputType="number" />
+
+
+            </LinearLayout>
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/btnConfirmDust"
+                android:layout_marginTop="10dp"
+                android:layout_width="150dp"
+                android:layout_marginLeft="10dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_height="wrap_content"
+                android:text="confirm" />
+
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:layout_columnWeight="1"
+            android:layout_margin="8dp"
+            android:layout_rowWeight="1"
+            android:id="@+id/Hum"
+            app:cardCornerRadius="8dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:textSize="7pt"
+                android:text="Humidity"
+                />
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:paddingTop="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="45dp">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Start Humidity Level:"
+                        android:paddingRight="80dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginBottom="30dp"
+
+                        android:textColor="#000"
+                        android:textSize="7.5pt"/>
+
+                    <EditText
+                        android:id="@+id/txtStartHum"
+                        android:layout_width="70dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ems="10"
+                        android:inputType="number" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:paddingTop="70dp"
+                android:layout_width="wrap_content"
+                android:layout_height="200dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="45dp">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="End Humidity Level:"
+                        android:paddingRight="90dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginBottom="30dp"
+                        android:textColor="#000"
+                        android:textSize="7.5pt"/>
+
+                    <EditText
+                        android:id="@+id/txtEndHum"
+                        android:layout_width="70dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ems="10"
+                        android:inputType="number" />
+
+
+                </LinearLayout>
+
+                <android.support.v7.widget.AppCompatButton
+                    android:id="@+id/btnConfirmHum"
+                    android:layout_marginTop="10dp"
+                    android:layout_width="150dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_height="wrap_content"
+                    android:text="confirm" />
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="20dp"
+            android:id="@+id/txtHumidity"
+            android:text="humidity"/>
+
+        <TextView
+            android:id="@+id/txtDust"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="20dp"
+            android:text="Dust"/>
     </LinearLayout>
+
+
 
 </android.support.v4.widget.NestedScrollView>
